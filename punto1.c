@@ -122,14 +122,44 @@ void transferirTareas(Lista *pendientes, Lista *realizadas) {
     }
 }
 
+void pertenece(Lista pendiente,Lista realizada,int id){
+    Nodo* aux = pendiente.L;                        
+    while(aux != NULL){          
+            if(aux->T.TareaID==id){      
+                printf("Es una tarea pendiente\n");
+                printf("\nID: %d | Desc: %s | Duracion: %d\n", aux->T.TareaID, aux->T.Descripcion, aux->T.Duracion);
+                return;
+            }
+        aux = aux->Siguiente;   
+    }
+    aux = realizada.L;
+    while(aux != NULL){          
+        if(aux->T.TareaID==id){      
+            printf("Es una tarea realizada\n");
+            printf("\nID: %d | Desc: %s | Duracion: %d\n", aux->T.TareaID, aux->T.Descripcion, aux->T.Duracion);
+            return;
+        }
+        aux = aux->Siguiente;   
+    }
+    printf("\nNo se encontro ninguna tarea con el ID %d.\n", id);
+    return;
+}
+
 int main(){
 Lista pendiente;
 Lista realizada;
+int id;
 pendiente=crearLista();
 realizada= crearLista();
 cargarTareas(&pendiente);
-mostrar(pendiente);
 transferirTareas(&pendiente,&realizada);
+printf("Tareas pendientes:\n");
+mostrar(pendiente);
+printf("Tareas realizadas:\n");
+mostrar(realizada);
+printf("Id de la tarea a consultar:\n");
+scanf("%d",&id);
+pertenece(pendiente,realizada,id);
 liberar(&pendiente);
 liberar(&realizada);
     return 0;

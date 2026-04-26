@@ -87,6 +87,41 @@ void liberar(Lista *H){
     }
 }
 
+void transferirTareas(Lista *pendientes, Lista *realizadas) {
+    Nodo *actual = pendientes->L;
+    Nodo *anterior = NULL;
+    int respuesta;
+
+    printf("\n--- Control de Tareas Pendientes ---\n");
+
+    while (actual != NULL) {
+        printf("\nID: %d | Descripcion: %s | Duracion: %d\n", 
+                actual->T.TareaID, actual->T.Descripcion, actual->T.Duracion);
+        printf("\n¿Realizo esta tarea? (1: Si / 0: No): ");
+        scanf("%d", &respuesta);
+
+        if (respuesta == 1) {
+            Nodo *nodoARealizar = actual;
+
+            if (anterior == NULL) {
+                pendientes->L = actual->Siguiente;
+            } else {
+                anterior->Siguiente = actual->Siguiente;
+            }
+            actual = actual->Siguiente; 
+            pendientes->cantidad--;
+            nodoARealizar->Siguiente = realizadas->L;
+            realizadas->L = nodoARealizar;
+            realizadas->cantidad++;
+
+            printf("Tarea realizada\n");
+        } else {
+            anterior = actual;
+            actual = actual->Siguiente;
+        }
+    }
+}
+
 int main(){
 Lista pendiente;
 Lista realizada;
@@ -94,6 +129,8 @@ pendiente=crearLista();
 realizada= crearLista();
 cargarTareas(&pendiente);
 mostrar(pendiente);
+transferirTareas(&pendiente,&realizada);
 liberar(&pendiente);
+liberar(&realizada);
     return 0;
 }
